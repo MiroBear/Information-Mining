@@ -1,31 +1,21 @@
-# The German Traffic Sign Recognition Benchmark
-#
-# sample code for reading the traffic sign images and the
-# corresponding labels
-#
-# example:
-#            
-# trainImages, trainLabels = readTrafficSigns('GTSRB/Training')
-# print len(trainLabels), len(trainImages)
-# plt.imshow(trainImages[42])
-# plt.show()
-#
-# have fun, Christian
-
-import numpy as np
-import matplotlib.pyplot as plt
 import csv
+import matplotlib.pyplot as plt
+import numpy as np
 import os.path
 from hogFeatures import HOGFeatures
+import skimage
+from skimage.transform import resize
 
 
 class DataReader(object):
     imagePath = '/home/mirco/PycharmProjects/GTSRB/Training'
     hogPath = '/home/mirco/PycharmProjects/GTSRB_Features_HOG/training/HOG_0'
+    huePath = '/home/mirco/PycharmProjects/GTSRB_Features_HueHist/Training/HueHist'
 
     tmpFileImages = imagePath + '/images.npy'
     tmpFileLabels = imagePath + '/labels.npy'
     tmpFileHOG01 = hogPath + '1' + '/hog01.npy'
+    tmpFileHue = huePath + '/hue.npy'
     tmpFileFileNames = imagePath + '/imageFileNames.npy'
 
     def readImages(self):
@@ -33,7 +23,6 @@ class DataReader(object):
         if tmpFilesExist:
             images = np.load(self.tmpFileImages)
             labels = np.load(self.tmpFileLabels)
-            fileNames = np.load(self.tmpFileFileNames)
             return images, labels
 
         labels, fileNames = self.readLabels()
@@ -45,23 +34,48 @@ class DataReader(object):
 
         return images, labels
 
-    def readHOG(self, hogType):
+    def readHOG(self):
         tmpFilesExist = os.path.isfile(self.tmpFileHOG01) and os.path.isfile(self.tmpFileLabels)
         if tmpFilesExist:
             hogFeatures = np.load(self.tmpFileHOG01)
             labels = np.load(self.tmpFileLabels)
-            fileNames = np.load(self.tmpFileFileNames)
-
             return hogFeatures, labels
 
         labels, fileNames = self.readLabels()
-        hogFeatures = self.readHOGIntern(1, labels, fileNames)
+
+        # hogFeaturesProvided = self.readHOGIntern(1, [labels[0]], [fileNames[0]])
+        # hogFeatures = self.extractHOG([labels[0]], [fileNames[0]])
+
+        # fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(8, 4))
+        # ax1.hist(hogFeaturesProvided[0], bins=25)
+        # ax2.hist(hogFeatures[0], bins=25)
+        # plt.show()
+
+        # hogFeatures = self.extractHOG(labels, fileNames)
+        hogFeatures = self.readHOGIntern(2, labels, fileNames)
 
         np.save(self.tmpFileHOG01, hogFeatures)
         np.save(self.tmpFileLabels, labels)
         np.save(self.tmpFileFileNames, fileNames)
 
         return hogFeatures, labels
+
+    def readHue(self):
+        tmpFilesExist = os.path.isfile(self.tmpFileHue) and os.path.isfile(self.tmpFileLabels)
+        if tmpFilesExist:
+            hueFeatures = np.load(self.tmpFileHue)
+            labels = np.load(self.tmpFileLabels)
+            return hueFeatures, labels
+
+        labels, fileNames = self.readLabels()
+
+        hueFeatures = self.readHueIntern(labels, fileNames)
+
+        np.save(self.tmpFileHue, hueFeatures)
+        np.save(self.tmpFileLabels, labels)
+        np.save(self.tmpFileFileNames, fileNames)
+
+        return hueFeatures, labels
 
     def readLabels(self):
         labels = []  # corresponding labels
@@ -91,20 +105,23 @@ class DataReader(object):
         # loop over all 42 classes
         for i in range(0, len(labels)):
             prefix = self.imagePath + '/' + format(int(labels[i]), '05d') + '/'  # subdirectory for class
-            images.append(plt.imread(prefix + fileNames[i]))  # the 1th column is the filename
+            # images.append(plt.imread(prefix + fileNames[i]))  # the 1th column is the filename
+
+            image = skimage.io.imread(prefix + fileNames[i], as_grey=True)
+            image = resize(image, [40, 40], order=1, mode='reflect')
+            images.append(image)  # the 1th column is the filename
 
         return images
 
     def extractHOG(self, labels, fileNames):
-        # TODO: extract HOG features using HOGFeatures class
-        # TODO: image should be scaled as well!
-        hogFeatures = np.empty([len(labels), 1568])
+        n = 1568
+        hogFeatures = np.empty([len(labels), n])
         for i in range(0, len(labels)):
             prefix = self.imagePath + '/' + format(int(labels[i]), '05d') + '/'  # subdirectory for class
             imageFileName = prefix + fileNames[i]
-            image = plt.imread(imageFileName)
+            image = HOGFeatures.scaleImage(imageFileName, np.array([40, 40]))
             fd = HOGFeatures.extractFeatures(image)
-            hogFeatures[i, :] = fd
+            hogFeatures[i, :] = fd.reshape([n])
 
         return hogFeatures
 
@@ -119,8 +136,19 @@ class DataReader(object):
 
         return hogFeatures
 
+    def readHueIntern(self, labels, fileNames):
+        hueFeatures = np.empty([len(labels), 256])
+        for i in range(0, len(labels)):
+            prefix = self.huePath + '/' + format(int(labels[i]), '05d') + '/'  # subdirectory for class
+            hueFileName = (prefix + fileNames[i]).replace('.ppm', '.txt')
+            hueImage = np.fromfile(hueFileName, sep="\n")
+            hueFeatures[i, :] = hueImage
+
+        return hueFeatures
+
     def clear(self):
-        os.remove(self.tmpFileImages)
-        os.remove(self.tmpFileLabels)
-        os.remove(self.tmpFileHOG01)
-        os.remove(self.tmpFileFileNames)
+        paths = [ self.tmpFileImages, self.tmpFileLabels, self.tmpFileFileNames, self.tmpFileHOG01 ]
+
+        for p in paths:
+            if os.path.isfile(p):
+                os.remove(p)
