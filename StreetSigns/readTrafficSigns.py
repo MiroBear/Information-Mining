@@ -1,8 +1,10 @@
+#!/usr/bin/env python3
+
 import csv
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 import numpy as np
 import os.path
-from hogFeatures import HOGFeatures
+from .hogFeatures import HOGFeatures
 import skimage
 from skimage.transform import resize
 

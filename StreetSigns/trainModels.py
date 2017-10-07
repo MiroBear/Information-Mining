@@ -1,21 +1,23 @@
+#!/usr/bin/env python3
 
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn import svm
-from sklearn.metrics import confusion_matrix
+# from sklearn.metrics import confusion_matrix
 from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LogisticRegression
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
-from sklearn.preprocessing import normalize
+# from sklearn.linear_model import LogisticRegression
+# from sklearn.ensemble import RandomForestClassifier
+# from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
+# from sklearn.preprocessing import normalize
 
-import readTrafficSigns as reader
+from StreetSigns.readTrafficSigns import DataReader
 
 
 def classify(images, labels):
     # create stratified labels with equal number of samples per class
     classes, classCnts = np.unique(labels, return_counts=True)
     evenCnt = len(labels) / len(classes)
+    evenCnt = int(evenCnt)
     stratifiedLabels = np.repeat(classes, evenCnt)
     stratifiedLabels = np.resize(stratifiedLabels, len(labels))
     remainder = len(labels) - evenCnt * len(classes)
@@ -69,7 +71,8 @@ def classify(images, labels):
 
 
 def main():
-    r = reader.DataReader()
+    r = DataReader()
+    # r = reader.DataReader()
 
     # r.clear()
 
