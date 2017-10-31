@@ -5,6 +5,7 @@ This continuously evolving project is about Data Science, collecting information
 It's intended to explain several of today's concepts and their relations, techniques and tools that are required for a full-scale application.
 
 - [Data Science, Data Mining & Data Analytics](DataScience.md)
+- [Statistics](Statistics.md)
 - [Machine Learning](MachineLearning.md)
 - [Artificial Intelligence](ArtificialIntelligence.md)
   - Robotics, Controlling, Fuzzy Logic, Learning & Reasoning, Expert Systems

@@ -1,13 +1,20 @@
 # Introduction, Purpose
 
-Analysis and visualization of low- and high-dimensional data for classification purposes. Data from publicly available data sources such as Kaggle.
+This is a description of general methods, techniques and steps required
+to analyse and visualize low- and high-dimensional data for classification
+purposes. Described are numerous parametric classification methods
+excluding deep learning.
 
-## Part 1 - Preprocessing, feature extraction and data visualization
+Data onto which this can be applied are publicly available as described
+in section data sources (e.g. Kaggle).
+
+## Part 1 - Pre-processing, feature extraction and data visualization
 
 - Extraction of features
 - Alignment of data sets to common spaces
 - Removal of artifacts
 - Handling of missing data
+- Visualization techniques
 
 ## Part 2 - Feature engineering
 
@@ -63,6 +70,12 @@ Difficulties:
 - Differences in the size and extend of sub-parts -> normalization required.
 - Differences in the anatomy which lead to different divisions of the objects.
 - Similarity measures to define a model which allows to compare patches with each other.
+
+# Open data sets
+
+- Kaggle:
+  -
+- ...
 
 # Recommended Books
 

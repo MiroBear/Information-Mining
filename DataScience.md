@@ -1,8 +1,9 @@
 # Data Science
 
-- Statistics
-- Data Visualization
-- Filtering, Feature Extraction
+## Statistics
+
+## Data Visualization
+## Filtering, Feature Extraction
 
 # Data Mining
 
@@ -27,3 +28,4 @@ Data can be
 - audio
 - analog and digital signals
 - patterns of any form
+
