@@ -1,14 +1,22 @@
 # Pre-processing
 
 - Dimensionality Reduction
+  - PCA / SVD
+  - GSVD
+  - Feature Selection
+    - Forward- / Backward Selection...
+    - Random Forest
+    - Pearson Correlation, ...
 - Feature Extraction
 - Image Processing
-- Feature Selection
-  - Forward- / Backward Selection...
-  - Random Forest
-  - Pearson Correlation, ...
 - Feature Engineering
 - Feature Merging / Conglomeration
+- Data
+  - structured vs unstructured
+  - nominal, ordinal, ...
+
+# Models
+- Markov Chains
 
 # Supervised Learning
 
@@ -18,6 +26,8 @@
 - Logistic Regression, Ridge Regression, Elastic Net LR
 - Graph Embedding
 - Subspace Methods
+- Bayesian Models and Networks
+- Generalized Singular Value Decomposition
 
 ## Parameter-Free Classifiers
 - kNN (k-nearest neighbor)
@@ -30,10 +40,18 @@
 ## Classifier Collection Methods
 - Boosting & Bagging
 
+## Online Learning / Batch Processing
+
+- Stochastic Gradient Descent with Classifiers: SVM, LR, Ridge, Elastic Net
+- LASVM,
+- Naive Bayes
+
 # Unsupervised Learning
 - Clustering
 
-# Metrics for Prediction Quality
+# Prediction
+
+# Metrics for Classification / Prediction Quality
 - Optimization Metrics
 - Accuracy, Precision
 - False-Positive Rate, False Negatives
@@ -43,6 +61,7 @@
 
 # Optimization Methods
 - Stochastic Gradient Descent
+- Monte Carlo sampling
 
 # Problems of ML
 - Small Sample Size (SSS) / High-dimensionality / Curse of Dimensionality
@@ -51,9 +70,10 @@
 - Over- and Under-Fitting
 
 # Deep Learning
-- CNN, ...
-- Recurrent neuronal networks
-- Adversarial neuronal networks
+- Convolutional NNs
+- Recurrent NNs
+- Adversarial NNs
+- Residual NNs
 - LSTM (Long-Short Term Memory)
 - Supervised
 - Unsupervised
